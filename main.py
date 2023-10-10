@@ -1,21 +1,49 @@
-import geopandas as gpd
-import matplotlib.pyplot as plt
+from dash import Dash, html, dcc, callback, Output, Input
+import pandas as pd
 
-if __name__ == '__main__':
-    url = 'data/wojewodztwa-medium.geojson'
+from map_visualisation import *
+
+df = px.data.election()
+
+app = Dash(__name__)
+
+app.layout = html.Div(
+    [
+        html.H4("Przykładowy tytuł strony"),
+        html.P("Wybierz zanieczyszczenie:"),
+        dcc.RadioItems(
+            id="pollution",
+            options=["carbon_dioxide", "carbon_dioxide_tons_by_sq_km"],
+            value="carbon_dioxide",
+            inline=True,
+        ),
+        dcc.Graph(id="graph"),
+    ]
+)
+@app.callback(
+    Output("graph", "figure"),
+    Input("pollution", "value"),
+)
+def map_plot(pollution):
+    url = "data/wojewodztwa-min.geojson"
 
     districts = gpd.read_file(url)
-    # print(districts)
-    ax1=districts.plot(column="carbon_dioxide", cmap='RdYlGn_r')
-    ax1.set_title("carbon dioxide per voivodeship")
-    ax1.set_axis_off()
-    plt.get_current_fig_manager().set_window_title('pora na ')
+    # districts = districts.to_crs("WGS84")
 
-    ax2 = districts.plot(column="carbon_dioxide_tons_by_sq_km", cmap='RdYlGn_r')
-    ax2.set_axis_off()
-    ax2.set_title("carbon dioxide (tons/km^2)")
-    plt.get_current_fig_manager().set_window_title('z csa ')
-    plt.show()
+    fig = px.choropleth(
+        districts,
+        geojson=districts.geometry,
+        locations = "id",
+        color=pollution,
+        projection="mercator",
+        color_continuous_scale = 'RdYlGn_r'
+    )
+    fig.update_geos(fitbounds="locations", visible=False)
+    fig.update_layout(margin={"r": 0, "t": 0, "l": 0, "b": 0})
+
+    return fig
 
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+if __name__ == '__main__':
+
+    app.run(debug=True)
