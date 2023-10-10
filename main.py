@@ -36,7 +36,9 @@ def map_plot(pollution):
         locations = "id",
         color=pollution,
         projection="mercator",
-        color_continuous_scale = 'RdYlGn_r'
+        color_continuous_scale = 'RdYlGn_r',
+        hover_name="nazwa",
+        hover_data={pollution: True, "id": False},
     )
     fig.update_geos(fitbounds="locations", visible=False)
     fig.update_layout(margin={"r": 0, "t": 0, "l": 0, "b": 0})
