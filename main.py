@@ -6,8 +6,42 @@ app = Dash(__name__)
 
 app.layout = html.Div(
     [
-        html.Div("title template", id="title", className="title"),
-        html.P("Wybierz zanieczyszczenie:", className="text"),
+        html.Div(
+            [
+                html.Div(
+                    [
+                        html.Div(className="cloud"),
+                    ],
+                    className="x1",
+                ),
+                html.Div(
+                    [
+                        html.Div(className="cloud"),
+                    ],
+                    className="x2",
+                ),
+                html.Div(
+                    [
+                        html.Div(className="cloud"),
+                    ],
+                    className="x3",
+                ),
+                html.Div(
+                    [
+                        html.Div(className="cloud"),
+                    ],
+                    className="x4",
+                ),
+                html.Div(
+                    [
+                        html.Div(className="cloud"),
+                    ],
+                    className="x4",
+                )
+            ],
+            className="background-wrap",
+        ),
+        html.Div("Całkowita emisja wybranych gazów cieplarnianych", id="title", className="title"),
         dcc.Slider(min=2016, max=2020,
                    step=None,
                    marks={
@@ -25,8 +59,15 @@ app.layout = html.Div(
             [
                 dcc.Dropdown(
                     id="pollution",
-                    options=load_pollution_names(),
-                    placeholder="Select a pollution",
+                    options=[
+                        {'label': 'dwutlenek węgla', 'value': 'co2'},
+                        {'label': 'metan', 'value': 'metan'},
+                        {'label': 'podtlenek azotu', 'value': 'n2o'},
+                        {'label': 'dwutlenek siarki', 'value': 'so2'},
+                        {'label': 'tlenek azotu', 'value': 'no'},
+                        {'label': 'tlenek węgla', 'value': 'co'},
+                    ],
+                    placeholder="Wybierz rodzaj gazu",
                     className="dropdown"
                 ),
                 dcc.RadioItems(
@@ -74,7 +115,9 @@ def map_plot(pollution, slider_year, type_of_plotting):
         )
         fig.update_geos(fitbounds="locations", visible=False)
         fig.update_layout(margin={"r": 0, "t": 0, "l": 0, "b": 0},
-        )
+                          coloraxis_colorbar_x=0.75,
+                          geo=dict(bgcolor="#00b4ff"),
+                          paper_bgcolor="#00b4ff")
 
         return fig
 

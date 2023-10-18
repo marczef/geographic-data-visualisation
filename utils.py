@@ -6,6 +6,7 @@ import pandas as pd
 from numpyencoder import NumpyEncoder
 import json
 import plotly.graph_objects as go
+from plotly.graph_objs import *
 
 def init_data():
     with open('data/wojewodztwa-min.geojson', 'r') as f:
@@ -60,9 +61,14 @@ def load_pollution_names():
 
 
 def blank_fig():
-    fig = go.Figure(go.Scatter(x=[], y=[]))
+    layout = Layout(
+        paper_bgcolor="#00b4ff",
+        plot_bgcolor="#00b4ff"
+    )
+    fig = go.Figure(go.Scatter(x=[], y=[]), layout=layout)
     fig.update_layout(template=None)
     fig.update_xaxes(showgrid=False, showticklabels=False, zeroline=False)
     fig.update_yaxes(showgrid=False, showticklabels=False, zeroline=False)
+
 
     return fig
