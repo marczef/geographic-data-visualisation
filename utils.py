@@ -62,8 +62,8 @@ def load_pollution_names():
 
 def blank_fig():
     layout = Layout(
-        paper_bgcolor="#00b4ff",
-        plot_bgcolor="#00b4ff"
+        paper_bgcolor='rgba(0,0,0,0)',
+        plot_bgcolor='rgba(0,0,0,0)'
     )
     fig = go.Figure(go.Scatter(x=[], y=[]), layout=layout)
     fig.update_layout(template=None)

@@ -14,7 +14,7 @@ body{
     bottom: 0;
 	left: 0;
 	padding-top: 50px;
-	position: fixed;
+	position: relative;
 	right: 0;
 	top: 0;
 	z-index: -1;
@@ -162,11 +162,13 @@ body{
     color: white;
     line-height: 63px;
     font-weight: 80;
+    position: absolute;
+    top: 0; #TODO
+    transform: translate(50%,50%);
 }
 .slider {
     width: 500px;
-    height: 15%;
-    margin: 30px auto 15px auto;
+    top: 32.5%;
 }
 .dropdown {
     width: 300px;
@@ -183,11 +185,17 @@ body{
 }
 .row {
     justify-content: center;
-    margin: auto;
-    height: 70px;
-    width: 700px;
     display: flex;
+    top: 42.5%;
 }
 .graph{
     height: 350px;
+    top: 52.5%;
+}
+.slider, .row, .graph{
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
 }
