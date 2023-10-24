@@ -63,7 +63,7 @@ app.layout = html.Div(
                         ),
                         dcc.RadioItems(
                             id="type_of_plotting",
-                            options=["per km square", "overall"], #TODO
+                            options=["tony na km\u00b2", "tony na wojewówdztwo"],
                             inline=True,
                             value="per km square",
                             className="radio"
@@ -103,10 +103,9 @@ def map_plot(pollution, slider_year, type_of_plotting):
             color=data_name,
             projection="mercator",
             color_continuous_scale='RdYlGn_r',
-            hover_name="nazwa", #TODO
+            hover_name="nazwa",
             hover_data={data_name: True, "id": False},
         )
-        # fig.update_traces(hovertemplate=(str(districts[data_name])))
         fig.update_geos(fitbounds="locations", visible=False)
         fig.update_layout(margin={"r": 0, "t": 0, "l": 0, "b": 0},
                           coloraxis_colorbar_x=0.75,

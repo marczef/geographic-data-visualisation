@@ -162,13 +162,11 @@ body{
     color: white;
     line-height: 63px;
     font-weight: 80;
-    position: absolute;
-    top: 0; /*TODO*/
-    transform: translate(50%,50%);
+    top: 5%;
 }
 .slider {
     width: 500px;
-    top: 32.5%;
+    top: 25%;
 }
 .dropdown {
     width: 300px;
@@ -181,18 +179,19 @@ body{
 .radio {
     max-width: 200px;
     margin-top: auto; margin-bottom: auto;
+    text-align: left;
     left: -25px;
 }
 .row {
     justify-content: center;
     display: flex;
-    top: 42.5%;
+    top: 32.5%;
 }
 .graph{
     height: 350px;
-    top: 52.5%;
+    top: 42.5%;
 }
-.slider, .row, .graph{
+.title, .slider, .row, .graph{
     position: absolute;
     left: 0;
     right: 0;
