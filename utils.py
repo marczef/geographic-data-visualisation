@@ -1,12 +1,12 @@
 import geopandas as gpd
 import numpy as np
 import plotly.express as px
-import matplotlib.pyplot as plt
 import pandas as pd
 from numpyencoder import NumpyEncoder
 import json
 import plotly.graph_objects as go
 from plotly.graph_objs import *
+
 
 def init_data():
     with open('data/wojewodztwa-min.geojson', 'r') as f:
@@ -16,7 +16,7 @@ def init_data():
     add_area(data_geojson, data)
 
     for year in ['2020', '2019', '2018', '2017', '2016']:
-        df1 = pd.read_excel(data, 'data'+year)
+        df1 = pd.read_excel(data, 'data' + year)
         df = pd.DataFrame(df1)
 
         for feat in data_geojson['features']:
@@ -43,14 +43,14 @@ def add_area(data_geojson, data):
 
 def add_data_per_km2(data_geojson, data):
     for year in ['2020', '2019', '2018', '2017', '2016']:
-        df1 = pd.read_excel(data, 'data'+year)
+        df1 = pd.read_excel(data, 'data' + year)
         df = pd.DataFrame(df1)
 
         for feat in data_geojson['features']:
             for woj in range(len(df["woj."])):
                 if feat["properties"]["nazwa"] == df["woj."][woj]:
                     for pol in list(df.columns)[2:]:
-                        feat['properties'][str(pol) + "_" + year + "_per_km_sq"] = df[pol][woj]/df['area'][woj]
+                        feat['properties'][str(pol) + "_" + year + "_per_km_sq"] = df[pol][woj] / df['area'][woj]
 
 
 def load_pollution_names():
@@ -69,6 +69,41 @@ def blank_fig():
     fig.update_layout(template=None)
     fig.update_xaxes(showgrid=False, showticklabels=False, zeroline=False)
     fig.update_yaxes(showgrid=False, showticklabels=False, zeroline=False)
-
-
     return fig
+
+
+def count_avg_by_voivodeship(ids, gas):
+    if not ids:
+        return "Nie podano danych"
+    with open('data/pollution_coordinates.geojson', 'r') as f:
+        data_geojson = json.load(f)
+
+    avg = 0
+    for feat in data_geojson['features']:
+        if feat["id"] in ids:
+            avg += feat["properties"][gas]
+
+    return avg / len(ids)
+
+
+def count_avg_by_year(years, gas, type_of_ploting, ids):
+    if not years:
+        return "Nie podano danych"
+    if len(ids) == 0:
+        ids = [i for i in range(0, 16)]
+    with open('data/pollution_coordinates.geojson', 'r') as f:
+        data_geojson = json.load(f)
+
+    avg = 0
+
+    for year in years:
+        if type_of_ploting == "overall":
+            gas_now = (gas + "_" + year)
+        elif type_of_ploting == "square":
+            gas_now = (gas + "_" + year + "_per_km_sq")
+
+        for feat in data_geojson['features']:
+            if feat["id"] in ids:
+                avg += feat["properties"][gas_now]
+
+    return avg / (len(ids) * len(years))
