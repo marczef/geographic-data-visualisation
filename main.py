@@ -125,7 +125,7 @@ app.layout = html.Div(
     prevent_initial_call=True
 )
 def update_avg_voi(n_clicks):
-    return count_avg_by_voivodeship(clicked_locations, actual_gas) #TODO dzielenie przez 0
+    return count_avg_by_voivodeship(clicked_locations, actual_gas)
 
 @callback(
     Output('pom_div_avg_year', 'children'),
@@ -142,8 +142,10 @@ def update_avg_year(pollution, type_of_plotting, years, n_clicks1, n_clicks2):
     if button_clicked == "submit_val_year1":
         return count_avg_by_year(years, pollution, type_of_plotting, [])
     elif button_clicked == "submit_val_year2":
-        return count_avg_by_year(years, pollution, type_of_plotting, clicked_locations)
-
+        if not clicked_locations:
+            return
+        else:
+            return count_avg_by_year(years, pollution, type_of_plotting, clicked_locations)
 
 @app.callback(
     Output('av_woj', 'children'),
@@ -211,5 +213,5 @@ def map_plot(pollution, slider_year, type_of_plotting, click_data):
 
 
 if __name__ == '__main__':
-    # init_data()
+    # init_data(absolute_path_init, absolute_path, absolute_path_excel)
     app.run(debug=True)
