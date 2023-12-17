@@ -207,22 +207,27 @@ h1 {
     -webkit-transform: translate(-50%,-50%);
     transform: translate(-50%,-50%);
     position: absolute;
-    top: 52.5%;
-    width: 20%;
-    height: 15%;
+    top: 61.5%;
+    width: 21.5%;
+    height: 33%;
     float: left;
-    margin-left: 14%;
+    margin-left: 13.25%;
     box-shadow: inset 0px 0px 400px 110px rgba(0, 0, 0, 0.15);
+    box-sizing: border-box;
+    padding: 1.25%;
 }
 .av_year
 {
     position: absolute;
     top: 45%;
-    width: 20%;
-    height: 15%;
-    right: 3.85%;
+    width: 21.5%;
+    height: 33%;
+    right: 2.4%;
     filter: brightness(85%);
     box-shadow: inset 0px 0px 400px 110px rgba(0, 0, 0, 0.15);
+    box-sizing: border-box;
+    padding-top: 5%;
+    padding: 1.25%;
 }
 .title, .slider, .row, .graph{
     position: absolute;
@@ -230,4 +235,31 @@ h1 {
     right: 0;
     margin-left: auto;
     margin-right: auto;
+}
+.title, .slider, .row{
+    box-shadow: inset 0px 0px 400px 110px rgba(0, 0, 0, 0.15);
+}
+.text_1, .submit_val, .pom_div_avg
+{
+    display: inline-block;
+    margin: 3%;
+}
+.submit_val
+{
+    padding: 7.5px 15px;
+    margin-bottom: 5%;
+    background-color: #e7e7e7
+}
+.text_2, .checklist_years, .pom_div_avg_year
+{
+    display: inline-block;
+    margin: 3%;
+}
+.submit_val_year1, .submit_val_year2
+{
+    display: inline-block;
+    padding: 7.5px 10px;
+    margin-bottom: 5%;
+    margin: 5px;
+    background-color: white
 }

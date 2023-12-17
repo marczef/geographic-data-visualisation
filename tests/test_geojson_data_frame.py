@@ -1,5 +1,6 @@
 import pytest
 from utils import *
+from contextlib import nullcontext as does_not_raise
 import os
 
 abs_path_geojson_test = r'C:\Users\User\OneDrive\Pulpit\Marcysia\github\visualisation_geographic_data\tests\test_examples\pollution_coordinates_test_copy.geojson'
@@ -12,7 +13,7 @@ def add_area_init():
     with open(abs_path_geojson_init_test, 'r') as f:
         test_data_geojson = json.load(f)
     test_data_excel = pd.ExcelFile(abs_path_excel_test)
-    add_area(test_data_geojson, test_data_excel)
+    add_area(test_data_geojson, read_from_excel(test_data_excel))
 
     return test_data_geojson
 
@@ -22,24 +23,11 @@ def test_add_area_pass(add_area_init):
 
 
 @pytest.fixture()
-def add_area_invalid_excel_path():
-    with open(abs_path_geojson_init_test, 'r') as f:
-        test_data_geojson = json.load(f)
-    test_data_excel = r'data/pollution_data.xlsx'
-    return test_data_geojson, test_data_excel
-
-
-def test_add_area_invalid_excel_path(add_area_invalid_excel_path):
-    with pytest.raises(TypeError):
-        add_area(add_area_invalid_excel_path[0], add_area_invalid_excel_path[1])
-
-
-@pytest.fixture()
 def add_area_invalid_excel_field():
     with open(abs_path_geojson_init_test, 'r') as f:
         test_data_geojson = json.load(f)
     test_data_excel = r'test_examples/pollution_data_test_1.xlsx'
-    return test_data_geojson, test_data_excel
+    return test_data_geojson, read_from_excel(test_data_excel)
 
 
 def test_add_area_invalid_excel_field(add_area_invalid_excel_field):
@@ -52,7 +40,7 @@ def add_area_invalid_geojson_field():
     with open(r'test_examples/wojewodztwa_test_1.geojson', 'r') as f:
         test_data_geojson = json.load(f)
     test_data_excel = abs_path_excel_test
-    return test_data_geojson, test_data_excel
+    return test_data_geojson, read_from_excel(test_data_excel)
 
 
 def test_add_area_invalid_geojson_field(add_area_invalid_geojson_field):
@@ -61,11 +49,39 @@ def test_add_area_invalid_geojson_field(add_area_invalid_geojson_field):
 
 
 @pytest.fixture()
+def add_area_invalid_dictionary_key():
+    with open(r'test_examples/wojewodztwa_test_1.geojson', 'r') as f:
+        test_data_geojson = json.load(f)
+    test_data_excel = read_from_excel(abs_path_excel_test)
+    test_data_excel['test2020'] = test_data_excel['2020']
+    del test_data_excel['2020']
+    return test_data_geojson, test_data_excel
+
+
+def test_add_area_invalid_dictionary_key(add_area_invalid_dictionary_key):
+    with pytest.raises(KeyError):
+        add_area(add_area_invalid_dictionary_key[0], add_area_invalid_dictionary_key[1])
+
+
+@pytest.fixture()
+def add_area_invalid_dictionary_types():
+    with open(r'test_examples/wojewodztwa_test_1.geojson', 'r') as f:
+        test_data_geojson = json.load(f)
+    test_data_excel = {1: "not data frame", 2: "for sure not data frame"}
+    return test_data_geojson, test_data_excel
+
+
+def test_add_area_invalid_dictionary_types(add_area_invalid_dictionary_types):
+    with pytest.raises(ValueError):
+        add_area(add_area_invalid_dictionary_types[0], add_area_invalid_dictionary_types[1])
+
+
+@pytest.fixture()
 def add_data_per_km2_init():
     with open(abs_path_geojson_init_test, 'r') as f:
         test_data_geojson = json.load(f)
     test_data_excel = pd.ExcelFile(abs_path_excel_test)
-    add_data_per_km2(test_data_geojson, test_data_excel)
+    add_data_per_km2(test_data_geojson, read_from_excel(test_data_excel))
 
     return test_data_geojson
 
@@ -75,37 +91,11 @@ def test_add_data_per_km2_pass(add_data_per_km2_init):
 
 
 @pytest.fixture()
-def add_data_per_km2_invalid_excel_path():
-    with open(abs_path_geojson_init_test, 'r') as f:
-        test_data_geojson = json.load(f)
-    test_data_excel = r'data/pollution_data.xlsx'
-    return test_data_geojson, test_data_excel
-
-
-def test_add_data_per_km2_invalid_excel_path(add_data_per_km2_invalid_excel_path):
-    with pytest.raises(TypeError):
-        add_data_per_km2(add_data_per_km2_invalid_excel_path[0], add_data_per_km2_invalid_excel_path[1])
-
-
-@pytest.fixture()
-def add_data_per_km2_invalid_excel_sheets():
-    with open(abs_path_geojson_init_test, 'r') as f:
-        test_data_geojson = json.load(f)
-    test_data_excel = r'test_examples/pollution_data_test_2.xlsx'
-    return test_data_geojson, test_data_excel
-
-
-def test_add_data_per_km2_invalid_excel_sheets(add_data_per_km2_invalid_excel_sheets):
-    with pytest.raises(TypeError):
-        add_data_per_km2(add_data_per_km2_invalid_excel_sheets[0], add_data_per_km2_invalid_excel_sheets[1])
-
-
-@pytest.fixture()
 def add_data_per_km2_invalid_excel_field():
     with open(abs_path_geojson_init_test, 'r') as f:
         test_data_geojson = json.load(f)
     test_data_excel = r'test_examples/pollution_data_test_1.xlsx'
-    return test_data_geojson, test_data_excel
+    return test_data_geojson, read_from_excel(test_data_excel)
 
 
 def test_add_data_per_km2_invalid_excel_field(add_data_per_km2_invalid_excel_field):
@@ -118,7 +108,7 @@ def add_data_per_km2_invalid_geojson_field():
     with open(r'test_examples/wojewodztwa_test_1.geojson', 'r') as f:
         test_data_geojson = json.load(f)
     test_data_excel = abs_path_excel_test
-    return test_data_geojson, test_data_excel
+    return test_data_geojson, read_from_excel(test_data_excel)
 
 
 def test_add_data_per_km2_invalid_geojson_field(add_data_per_km2_invalid_geojson_field):
@@ -130,13 +120,42 @@ def test_add_data_per_km2_invalid_geojson_field(add_data_per_km2_invalid_geojson
 def add_data_per_km2_divide_by_zero():
     with open(abs_path_geojson_init_test, 'r') as f:
         test_data_geojson = json.load(f)
-    test_data_excel = r'test_examples/pollution_data_test_3.xlsx'
+    test_data_excel = {year: pd.DataFrame(pd.read_excel(r'test_examples/pollution_data_test_3.xlsx', 'data' + year))
+                       for year in ['2020', '2019', '2018', '2017', '2016']}
     return test_data_geojson, test_data_excel
 
 
 def test_add_data_per_km2_divide_by_zero(add_data_per_km2_divide_by_zero):
     with pytest.raises(ZeroDivisionError):
         add_data_per_km2(add_data_per_km2_divide_by_zero[0], add_data_per_km2_divide_by_zero[1])
+
+
+@pytest.fixture()
+def add_data_per_km2_invalid_dictionary_key():
+    with open(r'test_examples/wojewodztwa_test_1.geojson', 'r') as f:
+        test_data_geojson = json.load(f)
+    test_data_excel = read_from_excel(abs_path_excel_test)
+    test_data_excel['test2020'] = test_data_excel['2020']
+    del test_data_excel['2020']
+    return test_data_geojson, test_data_excel
+
+
+def test_add_data_per_km2_invalid_dictionary_key(add_data_per_km2_invalid_dictionary_key):
+    with pytest.raises(KeyError):
+        add_data_per_km2(add_data_per_km2_invalid_dictionary_key[0], add_data_per_km2_invalid_dictionary_key[1])
+
+
+@pytest.fixture()
+def add_data_per_km2_invalid_dictionary_types():
+    with open(r'test_examples/wojewodztwa_test_1.geojson', 'r') as f:
+        test_data_geojson = json.load(f)
+    test_data_excel = {1: "not data frame", 2: "for sure not data frame"}
+    return test_data_geojson, test_data_excel
+
+
+def test_add_data_per_km2_area_invalid_dictionary_types(add_data_per_km2_invalid_dictionary_types):
+    with pytest.raises(ValueError):
+        add_data_per_km2(add_data_per_km2_invalid_dictionary_types[0], add_data_per_km2_invalid_dictionary_types[1])
 
 
 @pytest.fixture
@@ -176,7 +195,7 @@ def test_save_data_fail(save_data_fail):
 def add_data_absolute_init():
     with open(abs_path_geojson_init_test, 'r') as f:
         test_data_geojson = json.load(f)
-    test_data_excel = pd.ExcelFile(abs_path_excel_test)
+    test_data_excel = read_from_excel(pd.ExcelFile(abs_path_excel_test))
     add_data_absolute(test_data_geojson, test_data_excel)
 
     return test_data_geojson
@@ -187,37 +206,11 @@ def test_add_data_absolute_pass(add_data_absolute_init):
 
 
 @pytest.fixture()
-def add_data_absolute_invalid_excel_path():
-    with open(abs_path_geojson_init_test, 'r') as f:
-        test_data_geojson = json.load(f)
-    test_data_excel = r'data/pollution_data.xlsx'
-    return test_data_geojson, test_data_excel
-
-
-def test_add_data_absolute_invalid_excel_path(add_data_absolute_invalid_excel_path):
-    with pytest.raises(TypeError):
-        add_data_absolute(add_data_absolute_invalid_excel_path[0], add_data_absolute_invalid_excel_path[1])
-
-
-@pytest.fixture()
-def add_data_absolute_invalid_excel_sheets():
-    with open(abs_path_geojson_init_test, 'r') as f:
-        test_data_geojson = json.load(f)
-    test_data_excel = r'test_examples/pollution_data_test_2.xlsx'
-    return test_data_geojson, test_data_excel
-
-
-def test_add_data_absolute_invalid_excel_sheets(add_data_absolute_invalid_excel_sheets):
-    with pytest.raises(TypeError):
-        add_data_absolute(add_data_absolute_invalid_excel_sheets[0], add_data_absolute_invalid_excel_sheets[1])
-
-
-@pytest.fixture()
 def add_data_absolute_invalid_excel_field():
     with open(abs_path_geojson_init_test, 'r') as f:
         test_data_geojson = json.load(f)
     test_data_excel = r'test_examples/pollution_data_test_1.xlsx'
-    return test_data_geojson, test_data_excel
+    return test_data_geojson, read_from_excel(test_data_excel)
 
 
 def test_add_data_absolute_invalid_excel_field(add_data_absolute_invalid_excel_field):
@@ -230,12 +223,40 @@ def add_data_absolute_invalid_geojson_field():
     with open(r'test_examples/wojewodztwa_test_1.geojson', 'r') as f:
         test_data_geojson = json.load(f)
     test_data_excel = abs_path_excel_test
-    return test_data_geojson, test_data_excel
+    return test_data_geojson, read_from_excel(test_data_excel)
 
 
 def test_add_data_absolute_invalid_geojson_field(add_data_absolute_invalid_geojson_field):
     with pytest.raises(ValueError):
         add_data_absolute(add_data_absolute_invalid_geojson_field[0], add_data_absolute_invalid_geojson_field[1])
+
+
+@pytest.fixture()
+def add_data_absolute_invalid_dictionary_key():
+    with open(r'test_examples/wojewodztwa_test_1.geojson', 'r') as f:
+        test_data_geojson = json.load(f)
+    test_data_excel = read_from_excel(abs_path_excel_test)
+    test_data_excel['test2020'] = test_data_excel['2020']
+    del test_data_excel['2020']
+    return test_data_geojson, test_data_excel
+
+
+def test_add_data_absolute_invalid_dictionary_key(add_data_absolute_invalid_dictionary_key):
+    with pytest.raises(KeyError):
+        add_data_absolute(add_data_absolute_invalid_dictionary_key[0], add_data_absolute_invalid_dictionary_key[1])
+
+
+@pytest.fixture()
+def add_data_absolute_invalid_dictionary_types():
+    with open(r'test_examples/wojewodztwa_test_1.geojson', 'r') as f:
+        test_data_geojson = json.load(f)
+    test_data_excel = {1: "not data frame", 2: "for sure not data frame"}
+    return test_data_geojson, test_data_excel
+
+
+def test_add_data_absolute_area_invalid_dictionary_types(add_data_absolute_invalid_dictionary_types):
+    with pytest.raises(ValueError):
+        add_data_absolute(add_data_absolute_invalid_dictionary_types[0], add_data_absolute_invalid_dictionary_types[1])
 
 
 def test_init_data_json_decode_error():
@@ -246,3 +267,38 @@ def test_init_data_json_decode_error():
 def test_init_data_invalid_init_file():
     with pytest.raises(TypeError):
         init_data(r'\data\wojewodztwa-min.geojson', abs_path_geojson_test, abs_path_excel_test)
+
+
+def test_read_from_excel_pass():
+    with does_not_raise():
+        read_from_excel(abs_path_excel_test)
+
+
+def test_read_from_excel_invalid_path():
+    with pytest.raises(ValueError) as e:
+        read_from_excel(r'\data\pollution_data.xlsx')
+    assert str(e.value) == "Didn't find file or sheet"
+
+
+def test_read_from_excel_invalid_sheet():
+    with pytest.raises(ValueError) as e:
+        read_from_excel(r'test_examples/pollution_data_test_2.xlsx')
+    assert str(e.value) == "Didn't find file or sheet"
+
+
+def test_read_from_excel_zero_values():
+    with pytest.raises(ValueError) as e:
+        read_from_excel(r'test_examples/pollution_data_test_3.xlsx')
+    assert str(e.value) == "Pollution cannot be less/equal to 0"
+
+
+def test_read_from_excel_strings_in_excel():
+    with pytest.raises(ValueError) as e:
+        read_from_excel(r'test_examples/pollution_data_test_4.xlsx')
+    assert str(e.value) == "Invalid type"
+
+
+def test_read_from_excel_zeroes_and_negative_numbers_in_excel():
+    with pytest.raises(ValueError) as e:
+        read_from_excel(r'test_examples/pollution_data_test_5.xlsx')
+    assert str(e.value) == "Pollution cannot be less/equal to 0"

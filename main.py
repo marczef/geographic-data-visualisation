@@ -80,21 +80,19 @@ app.layout = html.Div(
                 ),
                 dcc.Graph(id="graph", className="graph", figure=blank_fig()),
                 html.Div([
-                    html.Div("Zaznacz województwa, z których chcesz wyliczyć średnią"),
+                    html.Div("Zaznacz województwa, z których chcesz wyliczyć średnią", id="text_1", className="text_1"),
                     html.Div(
-                        id='av_woj'
+                        id='av_woj',
+                        className='av_woj'
                     ),
-                    html.Button("Wylicz", id='submit_val'),
+                    html.Button("Wylicz", id='submit_val', className='submit_val'),
                     html.Div(
                         id="pom_div_avg"
                     )
                 ],
                     className="av_woje"),
                 html.Div([
-                    html.Div("Zaznacz lata (i województwa, z których chcesz wyliczyć średnią."),
-                    html.Div(
-                        id='av_year'
-                    ),
+                    html.Div("Zaznacz lata (i województwa, z których chcesz wyliczyć średnią.", className="text_2"),
                     dcc.Checklist(
                        options=[
                            {'label': '2016', 'value': '2016'},
@@ -104,12 +102,15 @@ app.layout = html.Div(
                            {'label': '2020', 'value': '2020'},
                        ],
                        value=['2020'],
-                       id='checklist_years'
+                       id='checklist_years',
+                       inline=True,
+                       className='checklist_years'
                     ),
-                    html.Button("Wylicz same lata", id='submit_val_year1'),
-                    html.Button("Wylicz lata z województwami", id='submit_val_year2'),
+                    html.Button("Dla całego kraju", id='submit_val_year1', className="submit_val_year1"),
+                    html.Button("Dla określonych woj", id='submit_val_year2', className="submit_val_year2"),
                     html.Div(
-                        id="pom_div_avg_year"
+                        id="pom_div_avg_year",
+                        className="pom_div_avg_year"
                     )
                 ],
                     className="av_year"),

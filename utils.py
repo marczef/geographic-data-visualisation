@@ -24,11 +24,32 @@ def init_data(init_geojson_path, path_geojson, excel_path):
     except:
         raise TypeError("Invalid path")
 
-    add_area(data_geojson, data)
-    add_data_absolute(data_geojson, data)
-    add_data_per_km2(data_geojson, data)
+    years = read_from_excel(data)
+
+    add_area(data_geojson, years)
+    add_data_absolute(data_geojson, years)
+    add_data_per_km2(data_geojson, years)
 
     save_data(path_geojson, data_geojson)
+
+
+def read_from_excel(data):
+    years = {}
+    for year in ['2020', '2019', '2018', '2017', '2016']:
+        try:
+            df1 = pd.read_excel(data, 'data' + year)
+            df = pd.DataFrame(df1)
+            years[year] = df
+        except:
+            raise ValueError("Didn't find file or sheet")
+
+        for pol in list(df.columns)[1:]:
+            if not all(isinstance(item, (np.floating, float, np.integer, int)) for item in df[pol]):
+                raise ValueError("Invalid type")
+            if any(item is None or item <= 0 for item in df[pol]):
+                raise ValueError("Pollution cannot be less/equal to 0")
+
+    return years
 
 
 def save_data(path, data_geojson):
@@ -39,49 +60,62 @@ def save_data(path, data_geojson):
         raise TypeError("Unable to serialize the object")
 
 
-def add_area(data_geojson, data): #adding area of voivodeship from excel to geojson
+def add_area(data_geojson, years):  # adding area of voivodeship from excel to geojson
     try:
-        df1 = pd.read_excel(data, 'data2020')
-        df = pd.DataFrame(df1)
-    except:
-        raise TypeError("Invalid path")
+        for k, v in years.items():
+            if isinstance(k, str) and isinstance(v, pd.DataFrame):
+                df = years['2020']
+            else:
+                raise ValueError("Invalid dictionary values")
+    except KeyError:
+        raise KeyError("Key must be years from 2016 to 2020")
+
 
     try:
         for feat in data_geojson['features']:
             for woj in range(len(df["woj."])):
                 if feat["properties"]["nazwa"] == df["woj."][woj]:
-                    feat['properties']['area'] = df['area'][woj]
+                    feat['properties']['area'] = df["area"][woj]
     except:
         raise ValueError("Invalid field")
 
 
-def add_data_per_km2(data_geojson, data): #adding a field in geojson with relative value
+def add_data_per_km2(data_geojson, years):  # adding a field in geojson with relative value
     for year in ['2020', '2019', '2018', '2017', '2016']:
+
         try:
-            df1 = pd.read_excel(data, 'data' + year)
-            df = pd.DataFrame(df1)
-        except:
-            raise TypeError("Didn't find file or sheet")
+            for k, v in years.items():
+                if isinstance(k, str) and isinstance(v, pd.DataFrame):
+                    df = years[year]
+                else:
+                    raise ValueError("Invalid dictionary values")
+        except KeyError:
+            raise KeyError("Key must be years from 2016 to 2020")
 
         try:
             for feat in data_geojson['features']:
                 for woj in range(len(df["woj."])):
                     if feat["properties"]["nazwa"] == df["woj."][woj]:
                         for pol in list(df.columns)[2:]:
-                            feat['properties'][str(pol) + "_" + year + "_per_km_sq"] = df[pol][woj].item() / df['area'][woj].item()
+                            feat['properties'][str(pol) + "_" + year + "_per_km_sq"] = df[pol][woj].item() / df['area'][
+                                woj].item()
         except ZeroDivisionError:
             raise ZeroDivisionError("Cannot divide by zero")
         except:
             raise ValueError("Invalid field")
 
 
-def add_data_absolute(data_geojson, data):
+def add_data_absolute(data_geojson, years):
     for year in ['2020', '2019', '2018', '2017', '2016']:
+
         try:
-            df1 = pd.read_excel(data, 'data' + year)
-            df = pd.DataFrame(df1)
-        except:
-            raise TypeError("Didn't find file or sheet")
+            for k, v in years.items():
+                if isinstance(k, str) and isinstance(v, pd.DataFrame):
+                    df = years[year]
+                else:
+                    raise ValueError("Invalid dictionary values")
+        except KeyError:
+            raise KeyError("Key must be years from 2016 to 2020")
 
         try:
             for feat in data_geojson['features']:
@@ -91,6 +125,7 @@ def add_data_absolute(data_geojson, data):
                             feat['properties'][str(pol) + "_" + year] = df[pol][woj]
         except:
             raise ValueError("Invalid field")
+
 
 def blank_fig():
     layout = Layout(
@@ -104,7 +139,7 @@ def blank_fig():
     return fig
 
 
-def count_avg_by_voivodeship(ids, gas): #counting average data of some voivodeships
+def count_avg_by_voivodeship(ids, gas):  # counting average data of some voivodeships
     if not ids or not gas or not all(isinstance(i, int) for i in ids):
         return
     if not all(0 <= i <= 15 for i in ids):
@@ -123,7 +158,7 @@ def count_avg_by_voivodeship(ids, gas): #counting average data of some voivodesh
         return None
 
 
-def count_avg_by_year(years, gas, type_of_ploting, ids): #counting average data of some years
+def count_avg_by_year(years, gas, type_of_ploting, ids):  # counting average data of some years
     if not years or not gas or not type_of_ploting or not all(isinstance(i, int) for i in ids):
         return
     if not all(0 <= i <= 15 for i in ids):
