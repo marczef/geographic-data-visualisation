@@ -35,7 +35,7 @@ def init_data(init_geojson_path, path_geojson, excel_path):
 
 def read_from_excel(data):
     years = {}
-    for year in ['2020', '2019', '2018', '2017', '2016']:
+    for year in ['2021', '2020', '2019', '2018', '2017', '2016']:
         try:
             df1 = pd.read_excel(data, 'data' + year)
             df = pd.DataFrame(df1)
@@ -64,11 +64,11 @@ def add_area(data_geojson, years):  # adding area of voivodeship from excel to g
     try:
         for k, v in years.items():
             if isinstance(k, str) and isinstance(v, pd.DataFrame):
-                df = years['2020']
+                df = years['2021']
             else:
                 raise ValueError("Invalid dictionary values")
     except KeyError:
-        raise KeyError("Key must be years from 2016 to 2020")
+        raise KeyError("Key must be years from 2016 to 2021")
 
 
     try:
@@ -81,7 +81,7 @@ def add_area(data_geojson, years):  # adding area of voivodeship from excel to g
 
 
 def add_data_per_km2(data_geojson, years):  # adding a field in geojson with relative value
-    for year in ['2020', '2019', '2018', '2017', '2016']:
+    for year in ['2021', '2020', '2019', '2018', '2017', '2016']:
 
         try:
             for k, v in years.items():
@@ -90,7 +90,7 @@ def add_data_per_km2(data_geojson, years):  # adding a field in geojson with rel
                 else:
                     raise ValueError("Invalid dictionary values")
         except KeyError:
-            raise KeyError("Key must be years from 2016 to 2020")
+            raise KeyError("Key must be years from 2016 to 2021")
 
         try:
             for feat in data_geojson['features']:
@@ -115,7 +115,7 @@ def add_data_absolute(data_geojson, years):
                 else:
                     raise ValueError("Invalid dictionary values")
         except KeyError:
-            raise KeyError("Key must be years from 2016 to 2020")
+            raise KeyError("Key must be years from 2016 to 2021")
 
         try:
             for feat in data_geojson['features']:

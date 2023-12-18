@@ -4,7 +4,7 @@ from contextlib import nullcontext as does_not_raise
 import os
 
 abs_path_geojson_test = r'C:\Users\User\OneDrive\Pulpit\Marcysia\github\visualisation_geographic_data\tests\test_examples\pollution_coordinates_test_copy.geojson'
-abs_path_geojson_init_test = r'C:\Users\User\OneDrive\Pulpit\Marcysia\github\visualisation_geographic_data\data\wojewodztwa-min.geojson'
+abs_path_geojson_init_test = r'C:\Users\User\OneDrive\Pulpit\Marcysia\github\visualisation_geographic_data\tests\test_examples\wojewodztwa-min_test_copy.geojson'
 abs_path_excel_test = r'C:\Users\User\OneDrive\Pulpit\Marcysia\github\visualisation_geographic_data\data\pollution_data.xlsx'
 
 
@@ -50,11 +50,11 @@ def test_add_area_invalid_geojson_field(add_area_invalid_geojson_field):
 
 @pytest.fixture()
 def add_area_invalid_dictionary_key():
-    with open(r'test_examples/wojewodztwa_test_1.geojson', 'r') as f:
+    with open(abs_path_geojson_init_test, 'r') as f:
         test_data_geojson = json.load(f)
     test_data_excel = read_from_excel(abs_path_excel_test)
-    test_data_excel['test2020'] = test_data_excel['2020']
-    del test_data_excel['2020']
+    test_data_excel['test2020'] = test_data_excel['2021']
+    del test_data_excel['2021']
     return test_data_geojson, test_data_excel
 
 
@@ -65,7 +65,7 @@ def test_add_area_invalid_dictionary_key(add_area_invalid_dictionary_key):
 
 @pytest.fixture()
 def add_area_invalid_dictionary_types():
-    with open(r'test_examples/wojewodztwa_test_1.geojson', 'r') as f:
+    with open(abs_path_geojson_init_test, 'r') as f:
         test_data_geojson = json.load(f)
     test_data_excel = {1: "not data frame", 2: "for sure not data frame"}
     return test_data_geojson, test_data_excel
@@ -121,7 +121,7 @@ def add_data_per_km2_divide_by_zero():
     with open(abs_path_geojson_init_test, 'r') as f:
         test_data_geojson = json.load(f)
     test_data_excel = {year: pd.DataFrame(pd.read_excel(r'test_examples/pollution_data_test_3.xlsx', 'data' + year))
-                       for year in ['2020', '2019', '2018', '2017', '2016']}
+                       for year in ['2021', '2020', '2019', '2018', '2017', '2016']}
     return test_data_geojson, test_data_excel
 
 
@@ -132,11 +132,11 @@ def test_add_data_per_km2_divide_by_zero(add_data_per_km2_divide_by_zero):
 
 @pytest.fixture()
 def add_data_per_km2_invalid_dictionary_key():
-    with open(r'test_examples/wojewodztwa_test_1.geojson', 'r') as f:
+    with open(abs_path_geojson_init_test, 'r') as f:
         test_data_geojson = json.load(f)
     test_data_excel = read_from_excel(abs_path_excel_test)
-    test_data_excel['test2020'] = test_data_excel['2020']
-    del test_data_excel['2020']
+    test_data_excel['test2020'] = test_data_excel['2021']
+    del test_data_excel['2021']
     return test_data_geojson, test_data_excel
 
 
@@ -147,7 +147,7 @@ def test_add_data_per_km2_invalid_dictionary_key(add_data_per_km2_invalid_dictio
 
 @pytest.fixture()
 def add_data_per_km2_invalid_dictionary_types():
-    with open(r'test_examples/wojewodztwa_test_1.geojson', 'r') as f:
+    with open(abs_path_geojson_init_test, 'r') as f:
         test_data_geojson = json.load(f)
     test_data_excel = {1: "not data frame", 2: "for sure not data frame"}
     return test_data_geojson, test_data_excel

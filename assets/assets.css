@@ -1,7 +1,7 @@
 body{
     background-color: #8ccce6;
     color: #333;
-	font: 100% Arial, Sans Serif;
+	font-family: -apple-system, system-ui, BlinkMacSystemFont;
 	margin: 0;
 	padding: 0;
 	overflow-x: hidden;
@@ -155,15 +155,9 @@ body{
 	right: 50px;
 	top: -90px;
 }
-/*plot parameters*/
-h1 {
-    /* 1 pixel black shadow to left, top, right and bottom */
-    text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
 
-    font-family: 100% Arial; color: white;
-}
 .title {
-    font-size: 40px;
+    font-size: 45px;
     margin: auto;
     line-height: 63px;
     font-weight: 80;

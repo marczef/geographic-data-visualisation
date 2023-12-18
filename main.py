@@ -1,5 +1,5 @@
 from dash import Dash, html, dcc, callback, Output, Input, State, no_update, ctx
-from kaleido.scopes.plotly import PlotlyScope
+from flask_caching import Cache
 
 from utils import *
 
@@ -37,7 +37,7 @@ app.layout = html.Div(
                     className="x4",
                 ),
                 html.H1("Całkowita emisja wybranych gazów cieplarnianych", id="title", className="title"),
-                dcc.Slider(min=2016, max=2020,
+                dcc.Slider(min=2016, max=2021,
                            step=None,
                            marks={
                                2016: '2016',
@@ -45,9 +45,10 @@ app.layout = html.Div(
                                2018: '2018',
                                2019: '2019',
                                2020: '2020',
+                               2021: '2021',
                            },
                            id='slider_year',
-                           value=2020,
+                           value=2021,
                            className="slider",
                            ),
                 html.Div(
@@ -68,8 +69,8 @@ app.layout = html.Div(
                         dcc.RadioItems(
                             id="type_of_plotting",
                             options=[
-                                {'label': "tony na km\u00b2", 'value': "square"},
-                                {'label': "tony na wojewówdztwo", 'value': "overall"}
+                                {'label': "tyś. ton na km\u00b2", 'value': "square"},
+                                {'label': "tyś. ton na woj.", 'value': "overall"}
                             ],
                             inline=True,
                             value="square",
@@ -100,8 +101,9 @@ app.layout = html.Div(
                            {'label': '2018', 'value': '2018'},
                            {'label': '2019', 'value': '2019'},
                            {'label': '2020', 'value': '2020'},
+                           {'label': '2021', 'value': '2021'},
                        ],
-                       value=['2020'],
+                       value=['2021'],
                        id='checklist_years',
                        inline=True,
                        className='checklist_years'
@@ -160,6 +162,9 @@ def return_avr_voi(click_data):
         else:
             clicked_locations.remove(location)
         return
+    else:
+        clicked_locations.clear()
+
 
 @app.callback(
     Output("graph", "figure"),
@@ -170,8 +175,7 @@ def return_avr_voi(click_data):
 )
 def map_plot(pollution, slider_year, type_of_plotting, click_data):
     try:
-        url = "data/pollution_coordinates.geojson"
-        districts = gpd.read_file(url)
+        districts = gpd.read_file(absolute_path)
 
         global actual_gas
 
