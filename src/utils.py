@@ -7,9 +7,9 @@ import json
 import plotly.graph_objects as go
 from plotly.graph_objs import *
 
-absolute_path = r'C:\Users\User\OneDrive\Pulpit\Marcysia\github\visualisation_geographic_data\data\pollution_coordinates.geojson'
-absolute_path_init = r'C:\Users\User\OneDrive\Pulpit\Marcysia\github\visualisation_geographic_data\data\wojewodztwa-min.geojson'
-absolute_path_excel = r'C:\Users\User\OneDrive\Pulpit\Marcysia\github\visualisation_geographic_data\data\pollution_data.xlsx'
+absolute_path = r'../data/pollution_coordinates.geojson'
+absolute_path_init = r'../data/wojewodztwa-min.geojson'
+absolute_path_excel = r'../data/pollution_data.xlsx'
 
 
 def init_data(init_geojson_path, path_geojson, excel_path):

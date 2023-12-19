@@ -1,5 +1,5 @@
 import pytest
-from utils import *
+from src.utils import *
 
 
 @pytest.mark.parametrize('years, gas, type_of_ploting, ids, expected', [

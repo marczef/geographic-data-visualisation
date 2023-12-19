@@ -1,7 +1,6 @@
 from dash import Dash, html, dcc, callback, Output, Input, State, no_update, ctx
-from flask_caching import Cache
 
-from utils import *
+from utils import  *
 
 clicked_locations = []
 actual_gas = ""
