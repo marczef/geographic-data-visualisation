@@ -1,5 +1,6 @@
 dash==2.14.2
 pandas==1.5.3
 geopandas==0.13.2
+numpyencoder==0.3.0
 gunicorn
 dash-tools
