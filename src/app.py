@@ -1,4 +1,5 @@
 from dash import Dash, html, dcc, callback, Output, Input, State, no_update, ctx
+import geopandas as gpd
 
 from utils import  *
 
