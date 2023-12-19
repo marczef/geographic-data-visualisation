@@ -7,6 +7,7 @@ clicked_locations = []
 actual_gas = ""
 
 app = Dash(__name__)
+server = app.server
 
 app.layout = html.Div(
     [
@@ -219,4 +220,4 @@ def map_plot(pollution, slider_year, type_of_plotting, click_data):
 
 if __name__ == '__main__':
     # init_data(absolute_path_init, absolute_path, absolute_path_excel)
-    app.run(debug=True)
+    app.run_server(debug=True)
