@@ -1,5 +1,6 @@
 import pytest
 from src.utils import *
+from contextlib import nullcontext as does_not_raise
 
 
 @pytest.mark.parametrize('years, gas, type_of_ploting, ids, expected', [
@@ -40,3 +41,43 @@ def test_avg_by_voiv_pass(ids, gas, expected):
 ])
 def test_avg_by_voiv_pass(ids, gas, expected):
     assert count_avg_by_voivodeship(ids, gas) == expected
+
+
+@pytest.fixture()
+def return_clicked_list_pass():
+    return {'points': [{'curveNumber': 0, 'pointNumber': 10, 'pointIndex': 10, 'location': 10, 'z': 0.740832959272279,
+                        'hovertext': 'pomorskie',
+                        'bbox': {'x0': 364.7527982234803, 'x1': 364.7527982234803, 'y0': 80.74700334428648,
+                                 'y1': 80.74700334428648}, 'customdata': [0.740832959272279, 10]}]}
+
+
+def test_return_clicked_list_pass(return_clicked_list_pass):
+    with does_not_raise():
+        return_clicked_list(return_clicked_list_pass)
+        assert clicked_locations == [10]
+
+
+@pytest.fixture()
+def return_clicked_list_clear():
+    clicked_locations.append(5)
+    clicked_locations.append(12)
+    clicked_locations.append(1)
+
+
+def test_return_clicked_list_clear(return_clicked_list_clear):
+    return_clicked_list(None)
+    assert clicked_locations == []
+
+
+def test_return_clicked_list_invalid_type():
+    with pytest.raises(ValueError):
+        return_clicked_list([10])
+
+
+def test_return_clicked_list_invalid_dict_key():
+    with pytest.raises(KeyError):
+        return_clicked_list({'points': [
+            {'curveNumber': 0, 'pointNumber': 10, 'pointIndex': 10, 'location_test': 10, 'z': 0.740832959272279,
+             'hovertext': 'pomorskie',
+             'bbox': {'x0': 364.7527982234803, 'x1': 364.7527982234803, 'y0': 80.74700334428648,
+                      'y1': 80.74700334428648}, 'customdata': [0.740832959272279, 10]}]})

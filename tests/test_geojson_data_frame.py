@@ -3,10 +3,9 @@ from src.utils import *
 from contextlib import nullcontext as does_not_raise
 import os
 
-abs_path_geojson_test = r'C:\Users\User\OneDrive\Pulpit\Marcysia\github\visualisation_geographic_data\tests\test_examples\pollution_coordinates_test_copy.geojson'
-abs_path_geojson_init_test = r'C:\Users\User\OneDrive\Pulpit\Marcysia\github\visualisation_geographic_data\tests\test_examples\wojewodztwa-min_test_copy.geojson'
-abs_path_excel_test = r'C:\Users\User\OneDrive\Pulpit\Marcysia\github\visualisation_geographic_data\data\pollution_data.xlsx'
-
+abs_path_geojson_test = r'C:\Users\User\OneDrive\Pulpit\Marcysia\github\geographic-data-visualisation\tests\test_examples\pollution_coordinates_test_copy.geojson'
+abs_path_geojson_init_test = r'C:\Users\User\OneDrive\Pulpit\Marcysia\github\geographic-data-visualisation\tests\test_examples\wojewodztwa-min_test_copy.geojson'
+abs_path_excel_test = r'C:\Users\User\OneDrive\Pulpit\Marcysia\github\geographic-data-visualisation\tests\test_examples\pollution_data_test.xlsx'
 
 @pytest.fixture()
 def add_area_init():
@@ -233,11 +232,11 @@ def test_add_data_absolute_invalid_geojson_field(add_data_absolute_invalid_geojs
 
 @pytest.fixture()
 def add_data_absolute_invalid_dictionary_key():
-    with open(r'test_examples/wojewodztwa_test_1.geojson', 'r') as f:
+    with open(abs_path_geojson_init_test, 'r') as f:
         test_data_geojson = json.load(f)
     test_data_excel = read_from_excel(abs_path_excel_test)
-    test_data_excel['test2020'] = test_data_excel['2020']
-    del test_data_excel['2020']
+    test_data_excel['test20219'] = test_data_excel['2019']
+    test_data_excel.pop('2019')
     return test_data_geojson, test_data_excel
 
 
