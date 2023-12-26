@@ -4,6 +4,7 @@ import geopandas as gpd
 from utils import *
 
 actual_gas = ""
+districts = gpd.read_file(absolute_path)
 
 app = Dash(__name__)
 server = app.server
@@ -98,7 +99,7 @@ app.layout = html.Div(
                 ],
                     className="av_woje"),
                 html.Div([
-                    html.Div("Zaznacz lata (i województwa, z których chcesz wyliczyć średnią.", className="text_2"),
+                    html.Div("Zaznacz lata (i województwa, z których chcesz wyliczyć średnią)", className="text_2"),
                     dcc.Checklist(
                         options=[
                             {'label': '2016', 'value': '2016'},
@@ -219,8 +220,6 @@ def map_plot(pollution, slider_year, type_of_plotting, click_data):
         """
 
     try:
-        districts = gpd.read_file(absolute_path)
-
         global actual_gas
 
         if type_of_plotting == "overall":
