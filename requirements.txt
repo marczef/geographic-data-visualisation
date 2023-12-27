@@ -4,3 +4,4 @@ geopandas==0.13.2
 numpyencoder==0.3.0
 gunicorn
 dash-tools
+sphinx-rtd-theme==2.0.0
