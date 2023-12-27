@@ -5,7 +5,7 @@ from setuptools import setup, find_packages
 setup(
     name='geographic-data-visualisation',
     version='0.1.0',
-    description='Air Pollution on Poland Map',
+    description='Air Pollution on Poland Map App',
     author='Marcjanna Bąkowska',
     author_email='bakowska@student.agh.edu.pl',
     url='https://github.com/marczef/geographic-data-visualisation',
